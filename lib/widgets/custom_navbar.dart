@@ -1,65 +1,57 @@
+import 'package:cred/screens/first_screen.dart';
+import 'package:cred/screens/notification.dart';
+import 'package:cred/screens/profile_screen.dart';
+import 'package:cred/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
-  final List<IconData> icons;
-  final int initialIndex;
-  final Function(int) onIconTap;
-
-  const CustomBottomNavigationBar({
-    Key? key,
-    required this.icons,
-    required this.initialIndex,
-    required this.onIconTap,
-  }) : super(key: key);
-
-
+class BottomNavBar extends StatefulWidget {
   @override
-  _CustomBottomNavigationBarState createState() => _CustomBottomNavigationBarState();
+  _BottomNavBarState createState() => _BottomNavBarState();
 }
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  late int _selectedIndex; // Initialize _selectedIndex here instead
+class _BottomNavBarState extends State<BottomNavBar> {
+  int _selectedIndex = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.initialIndex; // Assign value in initState
+  final List<Widget> _screens = [
+    HomeScreen1(),
+    SearchScreen(),
+    NotificationsScreen(),
+    ProfileScreen(),
+  ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(widget.icons.length, (index) {
-          final isSelected = index == _selectedIndex;
-          return InkWell(
-            onTap: () {
-              setState(() {
-                _selectedIndex = index;
-                widget.onIconTap(index); // Call parent's onIconTap as well
-              });
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  widget.icons[index],
-                  color: isSelected ? Colors.black : Colors.grey,
-                  size: 30.0,
-                ),
-                if (isSelected)
-                  Text(
-                    // Optional: Add text labels below icons (if desired)
-                    index == 0 ? 'Home' : (index == 1 ? 'Cards' : (index == 2 ? 'Notifications' : 'Settings')),
-                    style: TextStyle(color: Colors.black, fontSize: 12.0),
-                  ),
-              ],
-            ),
-          );
-        }),
+    return Scaffold(
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.notifications),
+            label: 'Notifications',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_circle),
+            label: 'Profile',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        onTap: _onItemTapped,
       ),
     );
   }

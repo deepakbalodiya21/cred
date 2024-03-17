@@ -1,6 +1,8 @@
 # cred
 
 A new Flutter project.
+mobile no and Passwords are : 
+enter any digit on M no. and password field
 
 ## Getting Started
 
